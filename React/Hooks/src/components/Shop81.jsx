@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 
 function Shop81() {
 
@@ -12,19 +12,39 @@ function Shop81() {
 
     const[addItem, setAddItem] = useState(false)
 
+    useEffect(() => {
+      const interval =  setInterval(() => {
+            Object.keys(items).forEach(function(key){
+                setItemsPrice(prevState => {
+                    return {...prevState, [key] : Math.floor(Math.random() * 1000)}
+                })
+            })
+        }, 3000);
+
+        return () => {
+            clearInterval(interval);
+          };
+    })
+
      const addItemFunc = () => {
         let val = document.getElementsByName('items')
-        let array = []
-        for(let item of val){
-            if(item.checked){
-                array.push({ id:item.value, value:item.value})
-            }
-        }      
-        setCheckedList(([...array]))
+        console.log(val[0])
+        console.log(typeof val)
+        
+        let array = Array.from(val).filter(data => data.checked)
+        console.log(typeof val)
+        console.log(array)
+        // for(let item of val){
+        //     if(item.checked){
+        //         array.push({ id:item.value, value:item.value})
+        //     }
+        // }      
+        setCheckedList(array)
 
+        // let selected = array.map(data => (<li key={data}> {data} </li>))
+        // console.log(selected)
+        //  setCheckedList(selected)
     }
-
-    
   return (
     <div>
         <div>
@@ -54,8 +74,9 @@ function Shop81() {
 
         <ul>
             {checkedList.map(item => (
-                <li key={item.id}>{item.value}</li>
+                <li key={item.value}>{item.value}</li>
             ))}
+
         </ul>
         </div>
     </div>
